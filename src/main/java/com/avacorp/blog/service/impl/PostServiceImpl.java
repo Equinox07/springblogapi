@@ -3,8 +3,12 @@ package com.avacorp.blog.service.impl;
 import com.avacorp.blog.exception.ResourceNotFoundException;
 import com.avacorp.blog.model.Post;
 import com.avacorp.blog.payload.PostDto;
+import com.avacorp.blog.payload.PostResponse;
 import com.avacorp.blog.repository.PostRepository;
 import com.avacorp.blog.service.PostService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,9 +36,28 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
-        return posts.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+    public PostResponse getAllPosts(int pageNo, int pageSize) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+
+        Page<Post> posts = postRepository.findAll(pageable);
+
+        //Get content for page post
+        List<Post> listOfPosts = posts.getContent();
+//        List<Post> posts = postRepository.findAll(pageable);
+
+      //  return posts.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+        List<PostDto> contents =  listOfPosts.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(contents);
+        postResponse.setPageNo(posts.getNumber());
+        postResponse.setPageSize(posts.getSize());
+        postResponse.setTotalElement(posts.getTotalElements());
+        postResponse.setTotalPages(posts.getTotalPages());
+        postResponse.setLast(posts.isLast());
+
+        return postResponse;
     }
 
     @Override
