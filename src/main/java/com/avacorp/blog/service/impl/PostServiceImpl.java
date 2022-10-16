@@ -6,7 +6,6 @@ import com.avacorp.blog.payload.PostDto;
 import com.avacorp.blog.payload.PostResponse;
 import com.avacorp.blog.repository.PostRepository;
 import com.avacorp.blog.service.PostService;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
