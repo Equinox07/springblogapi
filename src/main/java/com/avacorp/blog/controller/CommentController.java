@@ -1,5 +1,6 @@
 package com.avacorp.blog.controller;
 
+import com.avacorp.blog.model.Comment;
 import com.avacorp.blog.payload.CommentDto;
 import com.avacorp.blog.service.CommentService;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,16 @@ public class CommentController {
     @GetMapping("/posts/{postId}/comments")
     public List<CommentDto> getCommentsByPostId(@PathVariable(value = "postId") long postId){
             return commentService.getCommentsByPostId(postId);
+    }
+
+    @GetMapping("posts/{postId}/comments/{id}")
+    public ResponseEntity<CommentDto> getCommentById(@PathVariable(value = "postId") long postId,
+                                                  @PathVariable(value = "id") long commentId){
+
+        CommentDto commentDto = commentService.getCommentById(postId, commentId);
+
+        return new ResponseEntity<>(commentDto, HttpStatus.OK);
+
     }
 
 

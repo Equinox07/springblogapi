@@ -1,5 +1,6 @@
 package com.avacorp.blog.service.impl;
 
+import com.avacorp.blog.exception.BlogAPIException;
 import com.avacorp.blog.exception.ResourceNotFoundException;
 import com.avacorp.blog.model.Comment;
 import com.avacorp.blog.model.Post;
@@ -7,6 +8,7 @@ import com.avacorp.blog.payload.CommentDto;
 import com.avacorp.blog.repository.CommentRepository;
 import com.avacorp.blog.repository.PostRepository;
 import com.avacorp.blog.service.CommentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,6 +51,22 @@ public class CommentServiceImpl implements CommentService {
         // Convert list of comment entities to list of comment dto's
         return comments.stream().map(comment -> mapToDto(comment)).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public CommentDto getCommentById(long postId, long commentId) {
+        Post post = postRepository.findById(postId).orElseThrow(()
+                -> new ResourceNotFoundException("Post", "id", postId));
+
+        //Retrieve commentbyId
+        Comment comment = commentRepository.findById(commentId).orElseThrow(()
+                -> new ResourceNotFoundException("Comment", "id", commentId));
+
+        if (!comment.getPost().getId().equals(post.getId())) {
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Comment does not belong to post");
+        }
+
+        return mapToDto(comment);
     }
 
 
