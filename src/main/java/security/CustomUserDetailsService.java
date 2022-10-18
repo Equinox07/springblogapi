@@ -3,6 +3,7 @@ package security;
 import com.avacorp.blog.model.Role;
 import com.avacorp.blog.model.User;
 import com.avacorp.blog.repository.UserRepository;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
