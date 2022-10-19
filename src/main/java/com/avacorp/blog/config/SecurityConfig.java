@@ -71,7 +71,8 @@ public class SecurityConfig  {
     }
 
 
-    // First Implementations
+
+     //First Implementations
 //    @Override
 //    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth
