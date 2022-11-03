@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -24,6 +26,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import security.CustomUserDetailsService;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -33,7 +37,7 @@ public class SecurityConfig  {
     private CustomUserDetailsService userDetailsService;
 
 //    @Bean
-//    CustomUserDetailsService userDetailsService() {
+//    public UserDetailsService userDetailsService() {
 //        return new CustomUserDetailsService();
 //    }
 
@@ -51,10 +55,21 @@ public class SecurityConfig  {
 
         return authProvider;
     }
+
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+            //return configuration.getAuthenticationManager();
+        return new ProviderManager(daoAuthenticationProvider());
     }
+//    @Bean
+//    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+//        return http.getSharedObject(AuthenticationManagerBuilder.class)
+//                .userDetailsService(userDetailsService)
+//                .passwordEncoder(passwordEncoder())
+//                .and()
+//                .build();
+//    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -65,7 +80,11 @@ public class SecurityConfig  {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .httpBasic(withDefaults())
+                .authenticationProvider(daoAuthenticationProvider());
+
+
+//        http.authenticationProvider(daoAuthenticationProvider());
 
         return http.build();
     }
