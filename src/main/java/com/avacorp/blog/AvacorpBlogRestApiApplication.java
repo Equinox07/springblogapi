@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication
-@ComponentScan("com.avacorp.blog.security")
+@SpringBootApplication //@ComponentScan("com.avacorp.blog.security")
 public class AvacorpBlogRestApiApplication {
 	@Bean
 	public ModelMapper modelMapper(){
