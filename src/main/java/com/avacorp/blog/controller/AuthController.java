@@ -2,6 +2,7 @@ package com.avacorp.blog.controller;
 
 import com.avacorp.blog.model.Role;
 import com.avacorp.blog.model.User;
+import com.avacorp.blog.payload.JwtAuthResponse;
 import com.avacorp.blog.payload.LoginDto;
 import com.avacorp.blog.payload.SignUpDto;
 import com.avacorp.blog.repository.RoleRepository;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import security.JwtTokenProvider;
 
 import java.util.Collections;
 
@@ -32,6 +34,9 @@ public class AuthController {
     private UserRepository userRepository;
 
     @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
     RoleRepository roleRepository;
 
     @Autowired
@@ -39,13 +44,16 @@ public class AuthController {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
+    public ResponseEntity<JwtAuthResponse> authenticateUser(@RequestBody LoginDto loginDto){
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new ResponseEntity<>("User signed-in successfully", HttpStatus.OK);
+        //get token from token provider class
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        return ResponseEntity.ok(new JwtAuthResponse(token));
     }
 
     @PostMapping("/signup")
