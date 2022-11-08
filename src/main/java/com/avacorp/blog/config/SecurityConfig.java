@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new UserDetailsServiceImpl();
     }
 
-//    @Autowired
+    @Autowired
     @Bean
     public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint (){
         return new JwtAuthenticationEntryPoint();
@@ -98,7 +98,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // IT'S REQUIRED TO PREVENT SPRING BOOT AUTO-CONFIGURATION
         return super.authenticationManagerBean();
     }
-
 
     //    @Override
 //    @Bean

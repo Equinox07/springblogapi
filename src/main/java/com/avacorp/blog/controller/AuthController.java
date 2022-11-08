@@ -44,7 +44,7 @@ public class AuthController {
 
 
     @PostMapping("/signin")
-    public ResponseEntity<JwtAuthResponse> authenticateUser(@RequestBody LoginDto loginDto){
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginDto loginDto){
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(), loginDto.getPassword()));
 
@@ -53,7 +53,9 @@ public class AuthController {
         //get token from token provider class
         String token = jwtTokenProvider.generateToken(authentication);
 
-        return ResponseEntity.ok(new JwtAuthResponse(token));
+        return new ResponseEntity<>("User Logged in..", HttpStatus.OK);
+
+//        return ResponseEntity.ok(new JwtAuthResponse(token));
     }
 
     @PostMapping("/signup")
