@@ -13,16 +13,16 @@ public class AvacorpBlogRestApiApplication {
 		SpringApplication.run(AvacorpBlogRestApiApplication.class, args);
 	}
 
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-						.allowedOrigins("http://localhost:8080")
-						.allowedMethods("POST", "PUT", "GET", "OPTIONS", "DELETE", "PATCH" ,"HEAD");
-			}
-		};
-	}
+//	@Bean
+//	public WebMvcConfigurer corsConfigurer() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry registry) {
+//				registry.addMapping("/**")
+//						.allowedOrigins("http://localhost:8080")
+//						.allowedMethods("POST", "PUT", "GET", "OPTIONS", "DELETE", "PATCH" ,"HEAD");
+//			}
+//		};
+//	}
 
 }
